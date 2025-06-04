@@ -40,17 +40,18 @@
     <main class="container">
         <div id="room__container">
 
-            <section id="members__container">
+              <section id="messages__container">
 
-            <div id="members__header">
-                <p>Participants</p>
-                <strong id="members__count">0</strong>
-            </div>
+                <div id="messages"></div>
 
-            <div id="member__list">
-            </div>
+                <form id="message__form">
+                    <input type="text" name="message" placeholder="Send a message...." />
+                </form>
 
             </section>
+
+
+           
 
             <section id="stream__container">
 
@@ -76,15 +77,20 @@
                 <button id="join-btn">Join Stream</button>
             </section>
 
-            <section id="messages__container">
 
-                <div id="messages"></div>
+             <section id="members__container">
 
-                <form id="message__form">
-                    <input type="text" name="message" placeholder="Send a message...." />
-                </form>
+            <div id="members__header">
+                <p>Participants</p>
+                <strong id="members__count">0</strong>
+            </div>
+
+            <div id="member__list">
+            </div>
 
             </section>
+
+          
         </div>
     </main>
     

@@ -1,4 +1,4 @@
-const APP_ID = "YOUR-APP-ID"
+const APP_ID = "2d37f4302a4a4b5d9d083d58f16481b5"
 
 let uid = sessionStorage.getItem('uid')
 if(!uid){
@@ -6,7 +6,20 @@ if(!uid){
     sessionStorage.setItem('uid', uid)
 }
 
-let token = null;
+let rtmToken;
+let rtcToken;
+
+
+const fetchTokens = async () => {
+  const rtmResponse = await fetch(`http://localhost:3000/get-rtm-token?uid=${uid}`);
+  const rtmData = await rtmResponse.json();
+  rtmToken = rtmData.token;
+
+  const rtcResponse = await fetch(`http://localhost:3000/get-rtc-token?channelName=${roomId}&uid=${uid}`);
+  const rtcData = await rtcResponse.json();
+  rtcToken = rtcData.token;
+};
+
 let client;
 
 let rtmClient;
@@ -32,8 +45,13 @@ let localScreenTracks;
 let sharingScreen = false;
 
 let joinRoomInit = async () => {
+    await fetchTokens();
+
+ console.log("tokenrtm", rtmToken);
+    console.log("tokenrtc", rtcToken);
+
     rtmClient = await AgoraRTM.createInstance(APP_ID)
-    await rtmClient.login({uid,token})
+    await rtmClient.login({uid:uid,token:rtmToken})
 
     await rtmClient.addOrUpdateLocalUserAttributes({'name':displayName})
 
@@ -48,7 +66,7 @@ let joinRoomInit = async () => {
     addBotMessageToDom(`Welcome to the room ${displayName}! 👋`)
 
     client = AgoraRTC.createClient({mode:'rtc', codec:'vp8'})
-    await client.join(APP_ID, roomId, token, uid)
+    await client.join(APP_ID, roomId,rtcToken, uid)
 
     client.on('user-published', handleUserPublished)
     client.on('user-left', handleUserLeft)
